@@ -22,6 +22,7 @@ public class Node {
 
     public ArrayList<ArrayList<Character>> best() {
         int best = 0;
+        if(this.children.isEmpty()) return table;
         for (int i = 0; i < this.children.size(); i++) {
             if (this.children.get(i).score > this.children.get(best).score) {
                 best = i;

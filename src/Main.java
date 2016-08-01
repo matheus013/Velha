@@ -19,6 +19,7 @@ public class Main {
             }
         }
         int row, col;
+        Node root;
         System.out.println("Want start?");
         System.out.println("1 - Yes");
         System.out.println("2 - No");
@@ -31,17 +32,16 @@ public class Main {
             col = cin.nextInt();
             table.get(row).set(col, 'O');
         }
-        while (true) {
-            Node root = new Node(table, null, 0);
+        while (true){
+            root = new Node(table, null, 0);
             root.max();
             table = root.best();
             print(table);
+            if(root.children.isEmpty()) break;
             System.out.println("You turn: ");
             row = cin.nextInt();
             col = cin.nextInt();
             table.get(row).set(col, 'O');
-            if (root.children.isEmpty())
-                break;
         }
     }
 
