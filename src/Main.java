@@ -40,21 +40,23 @@ public class Main {
             row = cin.nextInt();
             col = cin.nextInt();
             table.get(row).set(col, 'O');
-            if (!root.end().equals(' '))
+            if (root.children.isEmpty())
                 break;
         }
     }
 
     public static void print(ArrayList<ArrayList<Character>> table) {
+        System.out.println("   0   1   2");
         for (int i = 0; i < 3; i++) {
+            System.out.printf(i + " ");
             for (int j = 0; j < 3; j++) {
                 System.out.printf(String.valueOf(table.get(i).get(j)));
                 System.out.printf((j < 2) ? " | " : "\n");
             }
             if (i < 2) {
-                System.out.println("----------");
+                System.out.println("  ----------");
             }
         }
-        System.out.println("\n\n");
+        System.out.println("");
     }
 }
