@@ -11,23 +11,34 @@ public class Node {
     public Node parent;
     public Integer level;
     public Integer score;
+    public Character mark;
 
-    public Node(ArrayList<ArrayList<Character>> table, Node parent, Integer level) {
+    public Node(ArrayList<ArrayList<Character>> table, Node parent, Integer level, Character mark) {
         this.table = table;
         this.children = new ArrayList<>();
         this.level = level;
         this.parent = parent;
         this.score = 0;
+        this.mark = mark;
     }
 
     public ArrayList<ArrayList<Character>> best() {
         int best = 0;
-        if(this.children.isEmpty()) return table;
+        if (this.children.isEmpty()) return table;
         for (int i = 0; i < this.children.size(); i++) {
-            if (this.children.get(i).score > this.children.get(best).score) {
-                best = i;
+            if (this.children.size() % 2 == 1) {
+                //MAX
+                if (this.children.get(i).score > this.children.get(best).score) {
+                    best = i;
+                }
+            } else {
+                //MIN
+                if (this.children.get(i).score < this.children.get(best).score) {
+                    best = i;
+                }
             }
         }
+        System.out.println("Best Score: " + this.children.get(best).score);
         return this.children.get(best).copy();
     }
 
@@ -35,15 +46,19 @@ public class Node {
         return this.get(x, y).equals(' ');
     }
 
-    public void max() {
+    public Character opMark() {
+        return (this.mark.equals('X')) ? 'O' : 'X';
+    }
+
+    public void buildTree() {
         Character finale = this.end();
         if (!finale.equals(' ')) {
             Node aux = this;
             while (aux != null) {
-                if (finale == 'X')
+                if (finale.equals(this.mark))
                     aux.score++;
-                else if (finale == 'O')
-                    aux.score--;
+                else if (finale.equals(opMark()))
+                    aux.score -= 2;
                 aux = aux.parent;
             }
             return;
@@ -52,13 +67,12 @@ public class Node {
             for (int j = 0; j < 3; j++) {
                 if (possible(i, j)) {
                     ArrayList<ArrayList<Character>> aux = this.copy();
-                    aux.get(i).set(j, (this.level % 2 == 0) ? 'X' : 'O');
-                    this.children.add(new Node(aux, this, this.level + 1));
+                    aux.get(i).set(j, (this.level % 2 == 0) ? this.mark : opMark());
+                    this.children.add(new Node(aux, this, this.level + 1, mark));
                 }
             }
         for (int i = 0; i < this.children.size(); i++) {
-            this.children.get(i).max();
-
+            this.children.get(i).buildTree();
         }
     }
 

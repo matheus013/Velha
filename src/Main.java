@@ -19,7 +19,7 @@ public class Main {
             }
         }
         int row, col;
-        Node root;
+        Node cpu1, cpu2;
         System.out.println("Want start?");
         System.out.println("1 - Yes");
         System.out.println("2 - No");
@@ -32,16 +32,19 @@ public class Main {
             col = cin.nextInt();
             table.get(row).set(col, 'O');
         }
-        while (true){
-            root = new Node(table, null, 0);
-            root.max();
-            table = root.best();
+        while (true) {
+            cpu1 = new Node(table, null, 0, 'X');
+            cpu1.buildTree();
+            table = cpu1.best();
             print(table);
-            if(root.children.isEmpty()) break;
+            if (cpu1.children.isEmpty()) break;
             System.out.println("You turn: ");
             row = cin.nextInt();
             col = cin.nextInt();
             table.get(row).set(col, 'O');
+//            cpu2 = new Node(table, null, 0, 'O');
+//            cpu2.buildTree();
+//            table = cpu2.best();
         }
     }
 
