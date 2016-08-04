@@ -26,19 +26,22 @@ public class Node {
         int best = 0;
         if (this.children.isEmpty()) return table;
         for (int i = 0; i < this.children.size(); i++) {
+            //MAX
             if (this.children.size() % 2 == 1) {
                 //MAX
-                if (this.children.get(i).score > this.children.get(best).score) {
+                if (this.children.get(i).score > this.children.get(best).score && this.children.get(i).safe()) {
                     best = i;
                 }
             } else {
                 //MIN
-                if (this.children.get(i).score < this.children.get(best).score) {
+                if (this.children.get(i).score < this.children.get(best).score && this.children.get(i).safe()) {
                     best = i;
                 }
             }
+            System.out.println("Score: " + this.children.get(i).score + " draw: " + this.children.get(i).safe());
+
         }
-        System.out.println("Best Score: " + this.children.get(best).score);
+        System.out.println("Best Score: " + this.children.get(best).score + " draw: " + this.children.get(best).children.size());
         return this.children.get(best).copy();
     }
 
@@ -54,11 +57,16 @@ public class Node {
         Character finale = this.end();
         if (!finale.equals(' ')) {
             Node aux = this;
+            if (finale.equals(this.mark)) {
+                this.score = 999999999;
+            } else if (finale.equals(opMark())) {
+                this.score = -999999999;
+            }
             while (aux != null) {
                 if (finale.equals(this.mark))
                     aux.score++;
                 else if (finale.equals(opMark()))
-                    aux.score -= 2;
+                    aux.score -= 10;
                 aux = aux.parent;
             }
             return;
@@ -144,5 +152,14 @@ public class Node {
             replica.add(new ArrayList<>(table.get(i)));
         }
         return replica;
+    }
+
+    public Boolean safe() {
+        for (int i = 0; i < this.children.size(); i++) {
+            if (this.children.get(i).end().equals(opMark())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
